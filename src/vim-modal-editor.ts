@@ -331,6 +331,11 @@ export class VimModalEditor extends CustomEditor {
         if (this.handlePendingY(matched.seqKey)) return;
       }
 
+      if (matched.leader === ':' && matched.seqKey === 'q') {
+        this.onCtrlD?.();
+        return;
+      }
+
       if (matched.leader === 'r' && matched.seqKey) {
         this.textEdit.replaceAtCursor(matched.seqKey);
         return;
@@ -640,6 +645,7 @@ export class VimModalEditor extends CustomEditor {
     this.keySeq.normal.register(new MultiCharKeySequence({ leader: 'd', sequences: ['d'] }));
     this.keySeq.normal.register(new MultiCharKeySequence({ leader: 'y', sequences: ['y'] }));
     this.keySeq.normal.register(new PrintableCharKeySequence({ leader: 'r' }));
+    this.keySeq.normal.register(new MultiCharKeySequence({ leader: ':', sequences: ['q'] }));
   }
 
   private registerVisualModeSequences() {
