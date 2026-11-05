@@ -288,6 +288,16 @@ export class VimModalEditor extends CustomEditor {
   }
 
   private handleNormalMode(data: string): void {
+    // Local patch: empty prompt -> transcript scroll/search keys enter alt-screen mode directly.
+    if (
+      this.getText() === '' &&
+      this.altScreen.isAvailable() &&
+      (['j', 'k', 'g', 'G', '/'].includes(data) || matchesKey(data, 'ctrl+d') || matchesKey(data, 'ctrl+u'))
+    ) {
+      this.setMode('altScreen');
+      this.handleAltScreenMode(data);
+      return;
+    }
     const parsed = parseKey(data);
     const { result, matched } = this.keySeq.normal.match(data);
 
