@@ -207,6 +207,13 @@ export class VimModalEditor extends CustomEditor {
       return;
     }
 
+    // Local patch: Enter in insert mode inserts a newline; submit only from normal mode.
+    // Autocomplete popup keeps Enter so selections still work.
+    if (matchesKey(data, 'enter') && !this.isShowingAutocomplete()) {
+      super.handleInput('\n');
+      return;
+    }
+
     super.handleInput(data);
   }
 
